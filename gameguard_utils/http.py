@@ -2,7 +2,7 @@ import aiohttp
 from typing import Optional, Any
 
 
-async def get(url: str, headers: Optional[Dict[str, str]] = None, params: Optional[dict[str, Any]] = None):
+async def get(url: str, headers: Optional[dict[str, str]] = None, params: Optional[dict[str, Any]] = None):
     async with aiohttp.ClientSession() as session:
         async with session.get(url, headers=headers, params=params) as response:
             if response.status != 200:
