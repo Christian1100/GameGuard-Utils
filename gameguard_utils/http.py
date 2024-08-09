@@ -24,3 +24,11 @@ async def put(url: str, headers: Optional[dict] = None, params: Optional[dict[st
             if response.status != 200:
                 return None
             return await response.json()
+
+async def delete(url: str, headers: Optional[dict] = None, params: Optional[dict[str, Any]] = None):
+    async with aiohttp.ClientSession() as session:
+        async with session.delete(url, headers=headers, params=params) as response:
+            if response.status != 200:
+                return None
+            return await response.json()
+            
