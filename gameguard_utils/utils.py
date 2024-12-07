@@ -77,3 +77,8 @@ async def edit_respond(interaction: discord.Interaction, **kwargs):
             if e.code != 40060:
                 raise e
     await interaction.edit_original_response(**kwargs)
+
+
+def generate_random_string(length: int = 32) -> str:
+    alphabet = string.ascii_letters + string.digits
+    return "".join(secrets.choice(alphabet) for _ in range(length))
