@@ -2,7 +2,7 @@ import os
 import string
 import secrets
 from pathlib import Path
-from typing import Callable, TYPE_CHECKING
+from typing import Callable, Optional, TYPE_CHECKING
 import asyncio
 import discord
 from discord import app_commands
@@ -84,3 +84,25 @@ async def edit_respond(interaction: discord.Interaction, **kwargs):
 def generate_random_string(length: int = 32) -> str:
     alphabet = string.ascii_letters + string.digits
     return "".join(secrets.choice(alphabet) for _ in range(length))
+
+
+def get_file_format(
+    files: List[discord.Attachment],
+    filename: Optional[str] = None,
+    extensions: Optional[List[str]] = None,
+    max_files: Optional[int] = 1,
+):
+    filtered_files = []
+    for file in files:
+        name, ext = file.filename.rsplit(".", 1)
+        name, ext = name.lower(), ext.lower()
+
+        if (filename is None or name == filename.lower()) and (
+            extensions is None or ext in [e.lower() for e in extensions]
+        ):
+            filtered_files.append(ext)
+
+        if max_files is not None and len(filtered_files) >= max_files:
+            break
+
+    return filtered_files
