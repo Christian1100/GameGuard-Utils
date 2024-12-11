@@ -2,7 +2,7 @@ import os
 import string
 import secrets
 from pathlib import Path
-from typing import Callable, Optional, TYPE_CHECKING
+from typing import Callable, Optional, List, TYPE_CHECKING
 import asyncio
 import discord
 from discord import app_commands
