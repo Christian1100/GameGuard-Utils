@@ -28,13 +28,14 @@ class View(discord.ui.View):
             if item.is_dispatchable():
                 self.remove_item(item)
 
-        if self._enabled:
-            if self.interaction.response.is_done():
-                await self.interaction.edit_original_response(view=self)
-            else:
-                await self.interaction.response.edit_message(view=self)
-        elif self.interaction_message:
-            await self.interaction_message.edit(view=self)
+        with suppress(Exception):
+            if self._enabled:
+                if self.interaction.response.is_done():
+                    await self.interaction.edit_original_response(view=self)
+                else:
+                    await self.interaction.response.edit_message(view=self)
+            elif self.interaction_message:
+                await self.interaction_message.edit(view=self)
 
     async def interaction_check(self, interaction: discord.Interaction["Red"], /) -> bool:
         if self.owner_only and self.owner and interaction.user != self.owner:
