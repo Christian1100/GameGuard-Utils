@@ -24,8 +24,6 @@ class View(discord.ui.View):
         self.interaction_message: Optional[discord.Message] = message
 
     async def on_timeout(self) -> None:
-        if not self._enabled:
-            return
         for item in self.children:
             if item.is_dispatchable():
                 self.remove_item(item)
