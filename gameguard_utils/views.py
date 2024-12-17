@@ -1,5 +1,5 @@
 from typing import List, Any, Optional, TYPE_CHECKING
-
+from contextlib import suppress
 import discord
 
 if TYPE_CHECKING:
@@ -13,6 +13,7 @@ class View(discord.ui.View):
         *,
         owner: Optional[discord.abc.User] = None,
         owner_only: bool = True,
+        message: Optional[discord.Message] = None,
         timeout: Optional[float] = 300.0,
     ):
         super().__init__(timeout=timeout)
@@ -20,6 +21,7 @@ class View(discord.ui.View):
         self.interaction: Optional[discord.Interaction] = interaction
         self.owner: Optional[discord.User] = owner or (interaction.user if interaction else None)
         self.owner_only: bool = owner_only
+        self.interaction_message: discord.Message = interaction_message
 
     async def on_timeout(self) -> None:
         if not self._enabled:
@@ -27,7 +29,12 @@ class View(discord.ui.View):
         for item in self.children:
             if item.is_dispatchable():
                 self.remove_item(item)
-        await self.interaction.edit_original_response(view=self)
+
+        with suppress(Exception):
+            if self._enabled:
+                await self.interaction.edit_original_response(view=self)
+            elif self.interaction_message:
+                await self.interaction_message.edit(view=self)
 
     async def interaction_check(self, interaction: discord.Interaction["Red"], /) -> bool:
         if self.owner_only and self.owner and interaction.user != self.owner:
