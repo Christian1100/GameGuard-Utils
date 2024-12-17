@@ -35,7 +35,10 @@ class View(discord.ui.View):
 
         with suppress(Exception):
             if self._enabled:
-                await self.interaction.response.edit_message(view=self)
+                if self.interaction.response.is_done():
+                    await self.interaction.edit_original_response(view=self)
+                else:
+                    await self.interaction.response.edit_message(view=self)
             elif self.interaction_message:
                 await self.interaction_message.edit(view=self)
 
