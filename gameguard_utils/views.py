@@ -21,7 +21,7 @@ class View(discord.ui.View):
         self.interaction: Optional[discord.Interaction] = interaction
         self.owner: Optional[discord.User] = owner or (interaction.user if interaction else None)
         self.owner_only: bool = owner_only
-        self.interaction_message: discord.Message = interaction_message
+        self.interaction_message: Optional[discord.Message] = interaction_message
 
     async def on_timeout(self) -> None:
         if not self._enabled:
