@@ -119,7 +119,7 @@ class CharacterMessages:
         system_message: Optional[str] = None,
         user_messages: Optional[int] = MAX_USER_MESSAGES,
         assistant_messages: Optional[int] = MAX_ASSISTANT_MESSAGES,
-        image_vision: Optional[bool] = False,
+        image_vision_limit: Optional[int] = None,
         nsfw_allowed: Optional[bool] = False,
     ) -> tuple[List[dict], bool]:
         result = []
@@ -140,8 +140,8 @@ class CharacterMessages:
                 message.content if message.content else ""
             )
             if (
-                image_vision
-                and assistant_count == 0
+                image_vision_limit is not None
+                and assistant_count == image_vision_limit
                 and message.reference_message
                 and get_specific_files(
                     message.reference_message.attachments,
