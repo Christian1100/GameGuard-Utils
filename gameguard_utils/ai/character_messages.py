@@ -2,7 +2,8 @@ from enum import Enum
 import discord
 from typing import Optional, List
 from datetime import datetime, timedelta
-from ..utils import get_specific_files
+from .utils import PollStatus
+from gameguard_utils import get_specific_files
 
 
 MAX_MESSAGES = 30
@@ -17,9 +18,9 @@ class CharacterRole(Enum):
 
 
 class PollStatus(Enum):
-  NO_VOTE = 0
-  NEW_VOTE = 1
-  CHANGE_VOTE = 2
+    NO_VOTE = 0
+    NEW_VOTE = 1
+    CHANGE_VOTE = 2
 
 
 class CharacterMessages:
@@ -51,8 +52,10 @@ class CharacterMessages:
         if len(self.messages) > MAX_MESSAGES:
             self.messages.pop(0)
 
-    def add_event_message(self, content: str):
-        message = Message(author="Discord SYSTEM", role=CharacterRole.USER, content=content, ignore_filter=True)
+    def add_manually_message(
+        self, author: str, content: str, role: CharacterRole, ignore_filter: Optional[bool] = True
+    ):
+        message = Message(author=author, role=role, content=content, ignore_filter=ignore_filter)
         self.messages.append(message)
 
     def add_tool_message(self, tool_name: str, content: str):
@@ -189,6 +192,7 @@ class CharacterMessages:
             if (
                 message.ignore_filter
                 or message.role == CharacterRole.USER
+                and message.reference_message
                 and message.reference_message.author.id != author.id
             ):
                 continue
@@ -202,7 +206,7 @@ class CharacterMessages:
 
     def update_content(self, input_message: discord.Message, content: str):
         for message in self.messages:
-            if message.reference_message.id == input_message.id:
+            if message.reference_message and message.reference_message.id == input_message.id:
                 message.update_content(content)
                 return
 
