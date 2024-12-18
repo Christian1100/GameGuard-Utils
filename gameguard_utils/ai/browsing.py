@@ -21,10 +21,10 @@ from .character_messages import CharacterMessages
 from .moderation import violates_text_tos
 
 
-SEARCH_LIMIT = 10
+SEARCH_LIMIT = 5
 WEBSITE_LIMIT = 5000
 BROWSING_LIMIT = 5000 * SEARCH_LIMIT
-TIMEOUT = 1
+TIMEOUT = 0.5
 MAX_CONCURRENT_TASKS = 50
 MAX_RETRIES = 3
 BACKOFF_FACTOR = 1
