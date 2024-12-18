@@ -111,7 +111,7 @@ def get_file_format(
     return filtered_files
 
 
-async def fetch_file_content(self, files: List[discord.Attachment], extensions: List[str], limit: Optional[int] = None) -> str:
+async def fetch_file_content(files: List[discord.Attachment], extensions: List[str], limit: Optional[int] = None) -> str:
     result = ""
     for file in files[:limit]:
         if not any(file.filename.endswith(ext) for ext in ALLOWED_EXTENSIONS):
