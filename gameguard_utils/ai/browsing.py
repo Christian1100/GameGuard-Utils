@@ -21,10 +21,9 @@ from .character_messages import CharacterMessages
 from .moderation import violates_text_tos
 
 
-SEARCH_LIMIT = 5
+SEARCH_LIMIT = 10
 WEBSITE_LIMIT = 5000
 BROWSING_LIMIT = 5000 * SEARCH_LIMIT
-TIMEOUT = 0.5
 MAX_CONCURRENT_TASKS = 50
 MAX_RETRIES = 3
 BACKOFF_FACTOR = 1
@@ -34,9 +33,10 @@ executor = ThreadPoolExecutor(max_workers=20)
 
 
 class AIBrowser:
-    def __init__(self, bot, openai_client: AsyncClient):
+    def __init__(self, bot, openai_client: AsyncClient, timeout: int = 1):
         self.bot = bot
-
+        self.timeout = timeout
+        
         self.semaphore = asyncio.Semaphore(MAX_CONCURRENT_TASKS)
 
         self.client: AsyncClient = openai_client
@@ -231,7 +231,7 @@ class AIBrowser:
 
         try:
             scraped_data = await asyncio.wait_for(
-                self.bot.loop.run_in_executor(executor, start_scraping, url), timeout=TIMEOUT
+                self.bot.loop.run_in_executor(executor, start_scraping, url), timeout=self.timeout
             )
             if scraped_data:
                 return f"**Source URL:** {url}: {scraped_data}"
