@@ -16,6 +16,12 @@ class CharacterRole(Enum):
     TOOL = "tool"
 
 
+class PollStatus(Enum):
+  NO_VOTE = 0
+  NEW_VOTE = 1
+  CHANGE_VOTE = 2
+
+
 class CharacterMessages:
     def __init__(self):
         self.messages: List[Message] = []
@@ -327,9 +333,3 @@ class AIPollAnswer:
         for member in list(self.members.values()):
             result += f"[{member.display_name}, {member.id}] "
         return result
-
-
-class PollStatus(Enum):
-  NO_VOTE = 0
-  NEW_VOTE = 1
-  CHANGE_VOTE = 2
