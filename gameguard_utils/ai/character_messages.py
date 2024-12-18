@@ -2,7 +2,6 @@ from enum import Enum
 import discord
 from typing import Optional, List
 from datetime import datetime, timedelta
-from .utils import PollStatus
 from gameguard_utils import get_specific_files
 
 
