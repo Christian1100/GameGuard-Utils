@@ -13,6 +13,9 @@ if TYPE_CHECKING:
     from redbot.core.bot import Red
 
 
+ALLOWED_EXTENSIONS = [".py"]
+
+
 def unpack_error(e: Exception) -> Exception:
     if hasattr(e, 'original'):
         return unpack_error(e.original)
@@ -106,3 +109,19 @@ def get_file_format(
             break
 
     return filtered_files
+
+
+async def fetch_file_content(self, files: List[discord.Attachment], extensions: List[str], limit: Optional[int] = None) -> str:
+    result = ""
+    for file in files[:limit]:
+        if not any(file.filename.endswith(ext) for ext in ALLOWED_EXTENSIONS):
+            continue
+
+        try:
+            file_content = await file.read()
+            content_string = file_content.decode("utf-8")
+            result += f"=== {file.filename} === {content_string[:1000]}\n \n \n \n"
+        except UnicodeDecodeError as e:
+            pass
+
+    return result
