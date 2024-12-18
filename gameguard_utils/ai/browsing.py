@@ -48,10 +48,12 @@ class AIBrowser:
         messages: List[dict],
         match_history: CharacterMessages,
         stream: Optional[bool] = True,
+        moderate: Optional[bool] = True,
     ):
-        reject = await violates_text_tos(client=self.client, prompt=question, allow_nsfw=False)
-        if reject:
-            return None, None
+        if moderate:
+            reject = await violates_text_tos(client=self.client, prompt=question, allow_nsfw=False)
+            if reject:
+                return None, None
 
         website_data = []
         available_websites = await self.fetch_available_websites(question)
@@ -74,9 +76,10 @@ class AIBrowser:
                 selected_images = random.sample(available_images, min(image_count, len(available_images)))
                 image_urls = [img.get("image") for img in selected_images]
 
-        reject = await violates_text_tos(client=self.client, prompt=clean_website_data, allow_nsfw=False, threshold=0.6)
-        if reject:
-            return None, None
+        if moderate:
+            reject = await violates_text_tos(client=self.client, prompt=clean_website_data, allow_nsfw=False, threshold=0.6)
+            if reject:
+                return None, None
 
         current_image_count = len(image_urls)
         image_description = (
