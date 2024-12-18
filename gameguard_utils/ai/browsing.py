@@ -144,16 +144,19 @@ class AIBrowser:
         history_content = f"The researched website data are: {clean_website_data}"
         match_history.add_tool_message("Web-Browsing", history_content)
 
-        return (
-            await self.client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=messages,
-                temperature=0.3,
-                stream=stream,
-                response_format=generate_schema(),
-            ),
-            image_urls,
-        )
+        if moderate:
+            return (
+                await self.client.chat.completions.create(
+                    model="gpt-4o-mini",
+                    messages=messages,
+                    temperature=0.3,
+                    stream=stream,
+                    response_format=generate_schema(),
+                ),
+                image_urls,
+            )
+        else:
+            f"{image_description} Data: {clean_website_data}", image_urls
 
     async def fetch_available_websites(self, question: str):
         search_methods = [
