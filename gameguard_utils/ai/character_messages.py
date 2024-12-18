@@ -141,7 +141,7 @@ class CharacterMessages:
             )
             if (
                 image_vision_limit is not None
-                and assistant_count == image_vision_limit
+                and assistant_count >= image_vision_limit
                 and message.reference_message
                 and get_specific_files(
                     message.reference_message.attachments,
