@@ -49,6 +49,7 @@ class AIBrowser:
         match_history: CharacterMessages,
         stream: Optional[bool] = True,
         moderate: Optional[bool] = True,
+        summarize: Optional[bool] = True,
     ):
         if moderate:
             reject = await violates_text_tos(client=self.client, prompt=question, allow_nsfw=False)
@@ -144,7 +145,7 @@ class AIBrowser:
         history_content = f"The researched website data are: {clean_website_data}"
         match_history.add_tool_message("Web-Browsing", history_content)
 
-        if moderate:
+        if summarize:
             return (
                 await self.client.chat.completions.create(
                     model="gpt-4o-mini",
@@ -156,7 +157,7 @@ class AIBrowser:
                 image_urls,
             )
         else:
-            f"{image_description} Data: {clean_website_data}", image_urls
+            return f"{image_description} Data: {clean_website_data}", image_urls
 
     async def fetch_available_websites(self, question: str):
         search_methods = [
