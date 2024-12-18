@@ -33,7 +33,7 @@ executor = ThreadPoolExecutor(max_workers=20)
 
 
 class AIBrowser:
-    def __init__(self, bot, openai_client: AsyncClient, timeout: int = 1):
+    def __init__(self, bot, openai_client: AsyncClient, timeout: float = 1):
         self.bot = bot
         self.timeout = timeout
         
