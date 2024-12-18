@@ -158,7 +158,7 @@ class CharacterMessages:
                             {"type": "text", "text": message_content},
                             {
                                 "type": "image_url",
-                                "image_url": {"url": message.reference_message.attachments[0].url, "detail": "high"},
+                                "image_url": {"url": message.reference_message.attachments[0].url, "detail": "low"},
                             },
                         ],
                     },
