@@ -89,7 +89,7 @@ def generate_random_string(length: int = 32) -> str:
     return "".join(secrets.choice(alphabet) for _ in range(length))
 
 
-def get_file_format(
+def get_specific_files(
     files: List[discord.Attachment],
     filename: Optional[str] = None,
     extensions: Optional[List[str]] = None,
@@ -103,7 +103,7 @@ def get_file_format(
         if (filename is None or name == filename.lower()) and (
             extensions is None or ext in [e.lower() for e in extensions]
         ):
-            filtered_files.append(ext)
+            filtered_files.append(file)
 
         if max_files is not None and len(filtered_files) >= max_files:
             break
