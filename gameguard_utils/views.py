@@ -33,7 +33,8 @@ class View(discord.ui.View):
                     disabled_button = discord.ui.Button(
                         label=item.label,
                         style=discord.ButtonStyle.grey,
-                        disabled=True
+                        disabled=True,
+                        row=item.row
                     )
                     new_children.append(disabled_button)
                 else:
