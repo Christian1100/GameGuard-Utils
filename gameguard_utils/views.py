@@ -26,11 +26,27 @@ class View(discord.ui.View):
         self.interaction_message: Optional[discord.Message] = message
 
     async def on_timeout(self) -> None:
-        for item in self.children:
-            if item.is_dispatchable():
-                if self.disable_only:
-                    item.disabled = True
+        if self.disable_only:
+            new_children = []
+            for item in self.children:
+                if isinstance(item, discord.ui.Button) and item.url:
+                    disabled_button = discord.ui.Button(
+                        label=item.label,
+                        style=discord.ButtonStyle.grey,
+                        disabled=True
+                    )
+                    new_children.append(disabled_button)
                 else:
+                    if item.is_dispatchable():
+                        item.disabled = True
+                    new_children.append(item)
+            
+            self.clear_items()
+            for new_item in new_children:
+                self.add_item(new_item)
+        else:
+            for item in self.children:
+                if item.is_dispatchable():
                     self.remove_item(item)
 
         with suppress(Exception):
