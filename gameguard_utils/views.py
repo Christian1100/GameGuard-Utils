@@ -66,12 +66,3 @@ class View(discord.ui.View):
             await interaction.response.send_message(embed=embed, ephemeral=True)
             return False
         return True
-
-    async def on_error(
-        self,
-        interaction: discord.Interaction["Red"],
-        error: Exception,
-        item: discord.ui.Item[Any],
-        /,
-    ) -> None:
-        interaction.client.dispatch('error', 'on_view_interaction', self, item, interaction, error=error)
