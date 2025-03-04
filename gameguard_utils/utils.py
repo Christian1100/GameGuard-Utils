@@ -1,6 +1,7 @@
 import os
 import string
 import secrets
+import urllib.parse
 from pathlib import Path
 from typing import Callable, Optional, List, TYPE_CHECKING
 import asyncio
@@ -87,6 +88,15 @@ async def edit_respond(interaction: discord.Interaction, **kwargs):
 def generate_random_string(length: int = 32) -> str:
     alphabet = string.ascii_letters + string.digits
     return "".join(secrets.choice(alphabet) for _ in range(length))
+
+
+def extract_filenames(urls):
+    filenames = []
+    for url in urls:
+        parsed_url = urllib.parse.urlparse(url)
+        filename = parsed_url.path.split("/")[-1].split("?")[0]
+        filenames.append(filename)
+    return filenames
 
 
 def get_specific_files(
