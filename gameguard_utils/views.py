@@ -2,9 +2,6 @@ from typing import List, Any, Optional, TYPE_CHECKING
 from contextlib import suppress
 import discord
 
-if TYPE_CHECKING:
-    from redbot.core.bot import Red
-
 
 class View(discord.ui.View):
     def __init__(
@@ -37,7 +34,7 @@ class View(discord.ui.View):
             elif self.interaction_message:
                 await self.interaction_message.edit(view=self)
 
-    async def interaction_check(self, interaction: discord.Interaction["Red"], /) -> bool:
+    async def interaction_check(self, interaction: discord.Interaction) -> bool:
         if self.owner_only and self.owner and interaction.user != self.owner:
             embed = discord.Embed(colour=discord.Colour.dark_red())
             embed.description = 'You are not authorized to interact with this menu.'
@@ -47,9 +44,8 @@ class View(discord.ui.View):
 
     async def on_error(
         self,
-        interaction: discord.Interaction["Red"],
+        interaction: discord.Interaction,
         error: Exception,
-        item: discord.ui.Item[Any],
-        /,
+        item: discord.ui.Item[Any]
     ) -> None:
         interaction.client.dispatch('error', 'on_view_interaction', self, item, interaction, error=error)
